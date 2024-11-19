@@ -6,7 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DTS_API_VikingsID.Models;
 using DTS_API_VikingsID.Services;
+using Newtonsoft.Json;
 
 namespace DTS_API_VikingsID.ViewModel
 {
@@ -16,7 +18,10 @@ namespace DTS_API_VikingsID.ViewModel
         private string _password;
         private string _statusMessage;
         private string _response;
+        private string _accessToken;
+        private MyIdentityResult _info;
         private readonly ApiService _apiService;
+        private readonly InfoApiService _infoApiService;
 
         public string Username
         {
@@ -42,9 +47,22 @@ namespace DTS_API_VikingsID.ViewModel
             set { _response = value; OnPropertyChanged(); }
         }
 
+        public string AccessToken
+        {
+            get => _accessToken;
+            set { _accessToken = value; OnPropertyChanged(); }
+        }
+
+        public MyIdentityResult Info
+        {
+            get => _info;
+            set { _info = value; OnPropertyChanged(); }
+        }
+
         public LoginViewModel()
         {
             _apiService = new ApiService();
+            _infoApiService = new InfoApiService();
         }
 
         public async Task LoginAsync()
@@ -55,12 +73,25 @@ namespace DTS_API_VikingsID.ViewModel
             {
                 StatusMessage = "Login successful!";
 
-                Response = result.Result.AccessToken;
+                Response = JsonConvert.SerializeObject(result.Result);
+                AccessToken = result.Result.AccessToken;
                 //MessageBox.Show($"Access Token: {result.Result.AccessToken}"); a
             }
             else
             {
                 StatusMessage = "Login failed!";
+            }
+        }
+
+        public async Task GetInfo()
+        {
+            if (!string.IsNullOrEmpty(AccessToken))
+            {
+                var InfoResponse = await _infoApiService.GetMyIdentityAsync(AccessToken);
+                if (InfoResponse != null & InfoResponse.Success)
+                {
+                    Info = InfoResponse.Result;
+                }
             }
         }
 

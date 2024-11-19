@@ -58,7 +58,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\MyIdentityModels.cs" />
     <Compile Include="Services\ApiService.cs" />
+    <Compile Include="Services\InfoApiService.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
