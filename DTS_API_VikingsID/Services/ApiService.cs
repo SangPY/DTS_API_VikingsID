@@ -17,6 +17,7 @@ namespace DTS_API_VikingsID.Services
             {
                 using (var httpClient = new HttpClient())
                 {
+                    // Tạo nội dung JSON cho body yêu cầu
                     var payload = new
                     {
                         userNameOrEmailAddress = username,
@@ -24,17 +25,21 @@ namespace DTS_API_VikingsID.Services
                     };
 
                     var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+                    // Gửi yêu cầu POST
                     var response = await httpClient.PostAsync($"{_baseUrl}/api/auth/sign-in", content);
 
                     if (response.IsSuccessStatusCode)
                     {
+                        // Đọc dữ liệu JSON từ phản hồi
                         var responseString = await response.Content.ReadAsStringAsync();
                         Console.WriteLine(responseString); // Kiểm tra JSON trả về
-                    
+
+                        // Deserialize JSON thành đối tượng
                         return JsonConvert.DeserializeObject<LoginResponse>(responseString);
                     }
 
-                    return null;
+                    throw new Exception("Không thể kết nối đến API.");
+                //return null;
                 }
             }
         }

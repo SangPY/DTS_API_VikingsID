@@ -15,6 +15,7 @@ namespace DTS_API_VikingsID.ViewModel
         private string _username;
         private string _password;
         private string _statusMessage;
+        private string _response;
         private readonly ApiService _apiService;
 
         public string Username
@@ -35,6 +36,12 @@ namespace DTS_API_VikingsID.ViewModel
             set { _statusMessage = value; OnPropertyChanged(); }
         }
 
+        public string Response
+        {
+            get => _response;
+            set { _response = value; OnPropertyChanged(); }
+        }
+
         public LoginViewModel()
         {
             _apiService = new ApiService();
@@ -47,8 +54,9 @@ namespace DTS_API_VikingsID.ViewModel
             if (result != null && result.Success)
             {
                 StatusMessage = "Login successful!";
-                
-                MessageBox.Show($"Access Token: {result.Result.AccessToken}");
+
+                Response = result.Result.AccessToken;
+                //MessageBox.Show($"Access Token: {result.Result.AccessToken}"); a
             }
             else
             {
