@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -76,6 +77,13 @@ namespace DTS_API_VikingsID.ViewModel
                 Response = JsonConvert.SerializeObject(result.Result);
                 AccessToken = result.Result.AccessToken;
                 //MessageBox.Show($"Access Token: {result.Result.AccessToken}"); a
+
+                // Gọi API để lấy thông tin người dùng
+                var identityResponse = await _infoApiService.GetMyIdentityAsync(AccessToken);
+                if (identityResponse != null && identityResponse.Success)
+                {
+                    Info = identityResponse.Result;
+                }
             }
             else
             {
