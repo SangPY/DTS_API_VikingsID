@@ -14,7 +14,7 @@ namespace DTS_API_VikingsID.Services
     {
         private readonly string _baseUrl = "https://sb-auth.vikings.com.vn";
 
-        public async Task<MyIdentityResponse> GetMyIdentityAsync(string accessToken)
+        public async Task<MyInfo> GetMyInfoAsync(string accessToken)
         {
             using (var httpClient = new HttpClient())
             {
@@ -29,7 +29,7 @@ namespace DTS_API_VikingsID.Services
 
                     var responseString = await response.Content.ReadAsStringAsync();
 
-                    return JsonConvert.DeserializeObject<MyIdentityResponse>(responseString);
+                    return JsonConvert.DeserializeObject<MyInfo>(responseString);
                 }
 
                 return null;

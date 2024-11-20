@@ -20,7 +20,7 @@ namespace DTS_API_VikingsID.ViewModel
         private string _statusMessage;
         private string _response;
         private string _accessToken;
-        private MyIdentityResult _info;
+        private string _info;
         private readonly ApiService _apiService;
         private readonly InfoApiService _infoApiService;
 
@@ -54,7 +54,7 @@ namespace DTS_API_VikingsID.ViewModel
             set { _accessToken = value; OnPropertyChanged(); }
         }
 
-        public MyIdentityResult Info
+        public string Info
         {
             get => _info;
             set { _info = value; OnPropertyChanged(); }
@@ -79,10 +79,10 @@ namespace DTS_API_VikingsID.ViewModel
                 //MessageBox.Show($"Access Token: {result.Result.AccessToken}"); a
 
                 // Gọi API để lấy thông tin người dùng
-                var identityResponse = await _infoApiService.GetMyIdentityAsync(AccessToken);
-                if (identityResponse != null && identityResponse.Success)
+                var infoResponse = await _infoApiService.GetMyInfoAsync(AccessToken);
+                if (infoResponse != null && infoResponse.Success)
                 {
-                    Info = identityResponse.Result;
+                    Info = JsonConvert.SerializeObject(infoResponse.Result);
                 }
             }
             else
@@ -91,17 +91,17 @@ namespace DTS_API_VikingsID.ViewModel
             }
         }
 
-        public async Task GetInfo()
-        {
-            if (!string.IsNullOrEmpty(AccessToken))
-            {
-                var InfoResponse = await _infoApiService.GetMyIdentityAsync(AccessToken);
-                if (InfoResponse != null & InfoResponse.Success)
-                {
-                    Info = InfoResponse.Result;
-                }
-            }
-        }
+        //public async Task GetInfo()
+        //{
+        //    if (!string.IsNullOrEmpty(AccessToken))
+        //    {
+        //        var InfoResponse = await _infoApiService.GetMyInfoAsync(AccessToken);
+        //        if (InfoResponse != null & InfoResponse.Success)
+        //        {
+        //            Info = InfoResponse.Result;
+        //        }
+        //    }
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
